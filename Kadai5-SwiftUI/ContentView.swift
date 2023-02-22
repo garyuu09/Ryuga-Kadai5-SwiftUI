@@ -11,7 +11,7 @@ struct ContentView: View {
     @State private var divisor: String = ""
     @State private var divisible: String = ""
     @State private var result: String = ""
-    @State private var alertMessage: String = ""
+    @State private var alertMessage: String?
     @State private var showingAlert = false
 
     var body: some View {
@@ -29,32 +29,39 @@ struct ContentView: View {
                 let divisorNum: Double? = Double(divisor)
                 let divisibleNum: Double?  = Double(divisible)
 
-                guard let Num1 = divisorNum else {
+                guard let num1 = divisorNum else {
                     alertMessage = "割られる数を入力してください。"
-                    return showingAlert = true
+                    showingAlert = true
+                    return
                 }
-                guard let Num2 = divisibleNum else {
+                guard let num2 = divisibleNum else {
                     alertMessage = "割る数を入力してください。"
-                    return showingAlert = true
+                    showingAlert = true
+                    return
                 }
                 if divisibleNum == 0 {
                     alertMessage = "割る数は0以外の数字を入力してください"
-                    return showingAlert = true
+                    showingAlert = true
+                    return
                 }
-                result = String(Num1 / Num2)
+                result = String(num1 / num2)
 
             }) {
                 Text("計算")
-                    .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("課題5"),
-                              message: Text(alertMessage),
-                              dismissButton: .default(Text("OK")))
-                    }
             }
             Text(result)
         }
         .font(.title)
         .padding()
+        .alert(
+            "課題5",
+            isPresented: $showingAlert,
+            presenting: alertMessage,
+            actions: { _ in Button("OK") {} },
+            message: { message in
+                Text(message)
+            }
+        )
     }
 }
 
